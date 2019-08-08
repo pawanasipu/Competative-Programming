@@ -1,0 +1,9 @@
+int power(int a,int m1)
+{
+    if(m1==0)return 1;
+    else if(m1==1)return a;
+    else if(m1==2)return (1LL*a*a)%mod;
+    else if(m1&1)return (1LL*a*power(power(a,m1/2),2))%mod;
+    else return power(power(a,m1/2),2)%mod;
+}
+

@@ -1,0 +1,69 @@
+// Articulation points and bridges
+
+
+vector<int> gr[N];
+bool vis[N], AP[N];
+int n, m;
+int dist[N];     //distovery currTime of vertices
+int low[N];  //low[i] is the minimum of visited currTime of all vertices which are reachable from i.
+vector<ii> bridges;
+int currTime;
+
+void initialize()
+{
+    currTime = 0;
+    bridges.clear();
+    for(int i=1;i<=n;i++)
+    {
+        gr[i].clear();
+        vis[i]=false;
+        AP[i]=false;
+        dist[i]=0;
+        low[i]=MAXI;
+    }
+}
+
+
+void dfs(int u, int parent)
+{
+    vis[u] = true;
+    dist[u] = low[u] = currTime+1;  //since till now i have not explored the children of u all i know is the lowest numbered vertex which can be reached from u is u itself.
+    int child = 0;
+    for(int i = 0;i < gr[u].size(); i++)
+    {
+        int v = gr[u][i];
+        if(v == parent)
+            continue;
+        if(!vis[v])
+        {
+            child = child+1;
+            currTime++;
+            dfs(v, u);
+            //check if subtree rooted at v has a connection to one of the ancestors of u.
+            low[u] = min(low[u], low[v]);
+            if(low[v] > dist[u])
+            {   //this means the edge connecting u-v is a bridge.
+                if(u < v)
+                    bridges.pb({u, v});
+                else
+                    bridges.pb({v, u});
+            }
+            if(parent == -1 && child > 1) //if u is root and its child is > 1 then it is an A.P.
+                AP[u] = true;
+            
+            if(parent != -1 && low[v] >= dist[u])  //if u is not a root and the lowest reachable vertex from v has time greater than distovery time of u, then u is an A.P.
+                AP[u] = true;
+            
+        }
+        else
+            low[u] = min(low[u], dist[v]);
+    }
+}
+
+int main()
+{
+    for(int i=1;i<=n;i++)
+        if(!vis[i])
+            dfs(i,-1);
+}
+

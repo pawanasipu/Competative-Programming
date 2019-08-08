@@ -1,0 +1,50 @@
+int seg[5*N];
+ 
+void build(int ind, int l, int r)
+{
+    if(l==r)
+    {
+        seg[ind] = arr[l];
+        return;
+    }
+ 
+    int mid = (l+r)/2;
+    build(2*ind, l, mid);
+    build(2*ind + 1, mid+1, r);
+ 
+    seg[ind] = seg[2*ind] + seg[2*ind + 1];
+}
+ 
+void update(int ind, int l, int r, int pos, int val)
+{
+ 
+    if(l>pos or pos>r)
+        return;
+ 
+    if(l==r)
+    {
+        seg[ind] = val;
+        return;
+    }
+ 
+    int mid = (l+r)/2;
+    if(pos<=mid)
+        update(2*ind, l, mid, pos, val);
+    else
+        update(2*ind + 1, mid+1, r, pos, val);
+ 
+    seg[ind] = seg[2*ind] + seg[2*ind + 1];
+}
+ 
+int query(int ind, int l, int r, int x, int y)
+{
+    if(l>y or x>r)
+        return 0;
+ 
+    if(x<=l and r<=y)
+        return seg[ind];
+ 
+    int mid = (l+r)/2;
+ 
+    return query(2*ind, l, mid, x, y) +             query(2*ind + 1, mid+1, r, x, y);
+}

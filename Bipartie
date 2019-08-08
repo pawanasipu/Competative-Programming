@@ -1,0 +1,17 @@
+vector<int>gr[N];
+bool vis[N];
+int colour[N];
+bool bip;
+
+void dfs(int x, int col)
+{
+    vis[x] = true;
+    colour[x] = col;
+    for(auto i:gr[x])
+    {
+        if(!vis[i])
+            dfs(i,col^1);
+        else if(colour[i]==col)
+            bip = false;
+    }
+}

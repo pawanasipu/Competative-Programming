@@ -1,0 +1,35 @@
+// phi or totient values
+int phi[N+5];
+
+// Function to calculate Euler
+// Totient values
+void computeTotient()
+{
+    for (int i=1; i<=N; i++)
+        phi[i] = i; // indicates not evaluated yet
+                    // and initializes for product
+                    // formula.
+ 
+    // Compute other Phi values
+    for (int p=2; p<=N; p++)
+    {
+        // If phi[p] is not computed already,
+        // then number p is prime
+        if (phi[p] == p)
+        {
+            // Phi of a prime number p is
+            // always equal to p-1.
+            phi[p] = p-1;
+ 
+            // Update phi values of aint
+            // multiples of p
+            for (int i = 2*p; i<=N; i += p)
+            {
+               // Add contribution of p to its
+               // multiple i by multiplying with
+               // (1 - 1/p)
+               phi[i] = (phi[i]/p) * (p-1);
+            }
+        }
+    }
+}

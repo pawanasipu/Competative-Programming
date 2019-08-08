@@ -1,0 +1,93 @@
+string s, t;
+
+// To store single LCS
+vector<char>pawan;
+
+// To store all LCSs
+set<string>lcs;
+
+int dp[N][N], m, n;
+
+map<string, bool> mp[N][N];
+
+int MEM(int x, int y)
+{
+    if(x==0 or y==0)
+    {
+        dp[x][y] = 0;
+        return dp[x][y];
+    }
+
+    int ans = dp[x][y];
+    if(ans!=-1)
+        return ans;
+
+    if(s[x-1]==t[y-1])
+        dp[x][y] = 1 + MEM(x-1, y-1);
+    else
+        dp[x][y] = max(MEM(x-1, y), MEM(x, y-1));
+    
+    return dp[x][y]; 
+}
+
+void printlcs()
+{
+    int x = m, y = n;
+
+    while(x>0 and y>0)
+    {
+        if(s[x-1]==t[y-1])
+        {
+            pawan.push_back(s[x-1]);
+            x--;
+            y--;
+        }
+        else if(dp[x-1][y] > dp[x][y-1])
+            x--;
+        else
+            y--;
+    }
+}
+
+void backtrack(int x, int y, string word)
+{
+    if(mp[x][y].find(word)!=mp[x][y].end())
+        return;
+    if(x==0 or y==0)
+        lcs.insert(word);
+    else if(s[x-1]==t[y-1])
+    {
+        word = s[x-1] + word;
+        backtrack(x-1, y-1, word);
+    }
+    else if(dp[x-1][y]<dp[x][y-1])
+        backtrack(x, y-1, word);
+    else if(dp[x][y-1]<dp[x-1][y])
+        backtrack(x-1, y, word);
+    else
+    {
+        backtrack(x, y-1, word);
+        backtrack(x-1, y, word);
+    }
+
+    mp[x][y][word] = true;
+}
+
+main()
+{
+    for(int i=0;i<N;i++)
+        for(int j=0;j<N;j++)
+            dp[i][j] = -1;
+
+    MEM(m,n);
+
+    //cout << dp[m][n] << endl;
+
+    printlcs();
+
+    reverse(pawan.begin(), pawan.end());
+
+    bactrack(m, n, "");
+}
+
+

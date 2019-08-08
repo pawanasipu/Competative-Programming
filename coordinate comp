@@ -1,0 +1,16 @@
+set<int> co_comp;
+
+void coordinate_compression()
+{
+    int temp = 1;
+    map<int, int>mp;
+    while(!co_comp.empty())
+    {
+        int x = *co_comp.begin();
+        mp[x] = temp++;
+        co_comp.erase(x);
+    }
+
+    for(int i=1;i<=n;i++)
+        a[i] = mp[a[i]];
+}

@@ -1,0 +1,53 @@
+int dist [N];
+bool vis [N];
+
+// vertex, weight
+vector<pair<int, int>> gr[N];
+
+void dijkstra(int src)
+{
+    // set all vertex as unvisited            
+    memset(vis, false , sizeof vis);
+    
+    // set the vertices distances as infinity
+    for(int i=1;i<N;i++)
+        dist[i] = MAXI;
+        
+    dist[src] = 0;
+    
+    // multiset do the job as a min-priority queue
+    multiset < pair < int , int > > s;          
+
+    // insert the source node with distance = 0
+    s.insert({0 , 1});                          
+
+    while(!s.empty())
+    {
+        // pop the vertex with the minimum distance
+        pair <int , int> p = *s.begin();
+        s.erase(s.begin());
+
+        int x = p.second; 
+        int wei = p.first;
+        
+        // check if the popped vertex is visited before
+        if( vis[x] ) 
+            continue;                  
+        vis[x] = true;
+
+        for(int i = 0; i < gr[x].size(); i++)
+        {
+            int e = gr[x][i].f; 
+            int w = gr[x][i].s;
+            
+            // check if the next vertex distance could be minimized
+            if(dist[x] + w < dist[e]  )
+            {            
+                dist[e] = dist[x] + w;
+                
+                // insert the next vertex with the updated distance
+                s.insert({dist[e],  e} );           
+            }
+        }
+    }
+}

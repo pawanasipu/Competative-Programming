@@ -1,0 +1,85 @@
+// https://www.geeksforgeeks.org/kmp-algorithm-for-pattern-searching/
+vector<ll> compute_LPS(string pat, ll ps) 
+{ 
+    // length of the previous longest prefix suffix 
+    int len = 0; 
+
+    vector<ll>lps(ps);
+  
+    lps[0] = 0; // lps[0] is always 0 
+  
+    // the loop calculates lps[i] for i = 1 to M-1 
+    ll i = 1; 
+    while (i < ps)
+     { 
+        if (pat[i] == pat[len])
+        { 
+            len++; 
+            lps[i] = len; 
+            i++; 
+        } 
+        else // (pat[i] != pat[len]) 
+        {  
+            if (len != 0)
+             { 
+                len = lps[len - 1]; 
+  
+                // Also, note that we do not increment 
+                // i here 
+            } 
+            else // if (len == 0) 
+            { 
+                lps[i] = 0; 
+                i++; 
+            } 
+        } 
+    } 
+
+    return lps;
+
+} 
+
+// stores occurrences of txt[] in pat[] 
+vector<ll> KMP(string pat, string txt) 
+{ 
+    ll ps = pat.size(); 
+    ll ts = txt.size(); 
+  
+  
+    // Preprocess the pattern (calculate lps[] array) 
+    vector<ll> lps = compute_LPS(pat, ps); 
+
+    vector<ll>ans;
+  
+    int i = 0; // index for txt[] 
+    int j = 0; // index for pat[] 
+    while (i < ts) 
+    { 
+        if (pat[j] == txt[i])
+        { 
+            j++; 
+            i++; 
+        } 
+  
+        if (j == ps)
+        {
+            // store indexes occurences 
+            ans.push_back(i - j); 
+            //cout<<i-j<<endl;
+            j = lps[j - 1]; 
+        } 
+  
+        // mismatch after j matches 
+        else if (i < ts && pat[j] != txt[i])
+         { 
+            // Do not match lps[0..lps[j-1]] characters, 
+            // they will match anyway 
+            if (j != 0) 
+                j = lps[j - 1]; 
+            else
+                i++; 
+        } 
+    } 
+
+    return ans;
+} 
