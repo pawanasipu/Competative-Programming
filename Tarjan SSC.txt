@@ -1,0 +1,66 @@
+// To view the strongly connected components uncommnet w
+
+
+// Stores number of strongly connected components
+int ans = 0;
+vector<int> gr[N];
+
+int disc[N], low[N], inStack[N];
+stack<int> st;
+
+void dfs(int ch)
+{ 
+    static int time = 0; 
+  
+    disc[ch] = low[ch] = ++time; 
+    st.push(ch); 
+    inStack[ch] = 1; 
+  
+    
+    for (auto i: gr[ch]) 
+    {  
+        if (disc[i] == -1) 
+        { 
+            dfs(i);  
+            low[ch]  = min(low[ch], low[i]); 
+        } 
+        else if (inStack[i] == 1) 
+            low[ch]  = min(low[ch], disc[i]); 
+    } 
+  
+    int w = 0;  // To store stack extracted vertices 
+    if (low[ch] == disc[ch]) 
+    { 
+        ans++;
+        while (st.top() != ch) 
+        { 
+            w = st.top(); 
+            
+            // cout << w << " ";
+
+            inStack[w] = 0; 
+            st.pop(); 
+        } 
+        w = st.top(); 
+        
+        // cout << w << "\n";
+
+        inStack[w] = 0; 
+        st.pop();
+    } 
+}
+
+void Tarjan()
+{
+     
+    for (int i = 0; i < n; i++) 
+    { 
+        disc[i] = -1; 
+        low[i] = -1; 
+        inStack[i] = 0; 
+    } 
+  
+    for (int i = 0; i < n; i++) 
+        if (disc[i] == -1) 
+            dfs(i); 
+}
