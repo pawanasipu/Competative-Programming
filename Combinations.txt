@@ -1,0 +1,7 @@
+
+1. Identical Objects(K) into Distinct Bins(N)
+    N+K-1
+         C
+          K
+
+ 
