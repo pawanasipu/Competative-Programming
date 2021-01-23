@@ -1,4 +1,6 @@
 
+Useful Resource: https://math.libretexts.org/Bookshelves/Combinatorics_and_Discrete_Mathematics/Book%3A_Combinatorics_Through_Guided_Discovery_(Bogart)/03%3A_Distribution_Problems/3.01%3A_The_Idea_of_Distribution
+
 1. Identical Objects(K) into Distinct Bins(N)
     N+K-1
          C
